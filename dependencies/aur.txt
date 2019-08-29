@@ -7,3 +7,8 @@ gpmdp
 ttf-font-awesome-4
 awesome-terminal-fonts-git
 otf-droid-sans-mono-powerline-git
+downgrade
+dive
+xorg-xev
+spotify
+networkmanager-l2tp

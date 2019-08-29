@@ -14,13 +14,15 @@ floating_modifier $mod
 ############################################
 
 set $urgentTextColour           #101218
-set $primaryBackgroundColour    #1f222d
-set $secondaryBackgroundColour  #252936
-set $textColour                 #7780a1
+set $primaryBackgroundColour    #1e1e1e
+set $secondaryBackgroundColour  #252526
+set $tertiaryBackgroundColour   #333333
+
+set $textColour                 #848484
+set $focusedTextColour          #f6f6f7
 
 set $statusLineColour           #d1d4e0
-set $focusedTextColour          #ffffff
-set $urgentBackground           #ee829f
+set $urgentBackground           #ef5350
 set $indicatorColour            #fcc09e
 
 set $workspace1 "1: "
@@ -35,6 +37,10 @@ set $workspace9 "9: "
 set $workspace10 "10:  "
 set $workspace11 " Virtualbox" 
 set $workspace12 " Enpass"
+
+# scripts
+set $spotify ~/.config/i3/scripts/spotify-cli.sh
+set $vpnmanager ~/.config/i3/scripts/vpn-manager.sh
 
 ############################################
 #    i3 management keys                    #
@@ -113,14 +119,16 @@ bindsym $mod+shift+l exec /bin/bash ~/.config/i3/scripts/suspend.sh
 #    Application Keys                      #
 ############################################
 bindsym $mod+Return exec xfce4-terminal                                 # terminal
-bindsym $mod+e exec nautilus                                            # File manager
-bindsym Print exec gnome-screenshot                                     # Fullscreen screenshot
-bindsym $mod+Print exec /bin/bash ~/.config/i3/scripts/screenshot.sh    # Show screenshot window
+bindsym $mod+e exec xfce4-terminal -e ranger                            # File manager
+bindsym Print exec  flameshot screen -d 0 -p ~/Pictures/Screenshots     # Fullscreen screenshot
+bindsym $mod+Print exec flameshot gui					# Show screenshot window
 bindsym $mod+shift+b exec /bin/bash ~/.config/i3/scripts/brightness.sh
 
 # Rofi
-bindsym $mod+d exec "rofi -color-window '#273238, #273238, #1e2529' -color-normal '#273238, #c1c1c1, #273238, #394249, #ffffff' -color-active '#273238, #80cbc4, #273238, #394249, #80cbc4' -color-urgent '#273238, #ff1844, #273238, #394249, #ff1844' -lines 10 -line-padding 5 -show run"
-bindsym $mod+Tab exec "rofi -color-window '#273238, #273238, #1e2529' -color-normal '#273238, #c1c1c1, #273238, #394249, #ffffff' -color-active '#273238, #80cbc4, #273238, #394249, #80cbc4' -color-urgent '#273238, #ff1844, #273238, #394249, #ff1844' -lines 10 -line-padding 5 -show"
+bindsym $mod+d exec "rofi -show run"
+bindsym $mod+Tab exec "rofi -show"
+bindsym $mod+s exec "rofi -show ssh"
+bindsym $mod+n exec $vpnmanager
 
 ############################################
 #    Media keys                            #
@@ -139,6 +147,9 @@ bindsym XF86AudioPlay exec playerctl play
 bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
+bindsym $mod+Next exec $spotify next
+bindsym $mod+End exec $spotify prev
+bindsym $mod+Delete exec $spotify play
 
 ############################################
 #    Workspaces                            #
@@ -200,7 +211,7 @@ bar {
 new_window 1pixel
 hide_edge_borders both
 
-# Widow Colours
+# Window Colours
 #                       border                     background                  text               indicator
 client.focused          $primaryBackgroundColour   $primaryBackgroundColour    $focusedTextColour $indicatorColour
 client.focused_inactive $secondaryBackgroundColour $secondaryBackgroundColour  $textColour        $indicatorColour
@@ -220,6 +231,7 @@ for_window [class="Eog"] floating enable
 assign [class="Google Play Music Desktop Player"] $workspace10
 assign [class="Franz"] $workspace9
 assign [class="Enpass-Desktop"] $workspace12
+assign [class="Enpass"] $workspace12
 assign [class="VirtualBox Machine"] $workspace11
 
 # database stuff

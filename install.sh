@@ -85,23 +85,33 @@ function install_config {
 	linkDir "$PWD"/config/terminal/xfce4-term ~/.config/xfce4/terminal
 	linkDir "$PWD"/config/gtk-3.0/settings.ini ~/.config/gtk-3.0/.config
 	linkDir "$PWD"/templates ~/Templates
+	linkDir "$PWD"/config/ranger ~/.config/
 
 	# link user files
 	ln -sf "$PWD"/bash/.bashrc ~/.bashrc
 	ln -sf "$PWD"/bash/.alias.sh ~/.alias
 	ln -sf "$PWD"/config/nano/.nanorc ~/.nanorc
 	ln -sf "$PWD"/bash/.powerline-shell.json ~/.powerline-shell.json
-	ln -sf "$PWD"/wallpapers/space.jpg ~/Pictures/Wallpapers/wallpaper.jpg
+	ln -sf "$PWD"/wallpapers/butterflies-in-space.jpg ~/Pictures/Wallpapers/wallpaper.jpg
+	mkdir -p ~/.config/rofi
 	ln -sf "$PWD"/config/rofi ~/.config/rofi/config
 	ln -sf "$PWD"/config/.gitconfig ~/.gitconfig
+	ln -sf "$PWD"/config/.npmrc ~/.npmrc
+	ln -sf "$PWD"/config/user-dirs.dirs ~/.config/user-dirs.dirs
 
-	# link system files
+	# link system files / directories
 	sudo ln -sf "$PWD"/config/package-managers/pacman.conf /etc/pacman.conf
 	sudo ln -sf "$PWD"/config/package-managers/makepkg.conf /etc/makepkg.conf
 	sudo ln -sf "$PWD"/config/ntp.conf /etc/ntp.conf
+	sudo ln -sf "$PWD"/bash/Completion /etc/bash_completion.d
 
 	# create empty .custom alias file
 	echo "" > ~/.custom
+	echo "" > ~/.variables
+
+	# system fixes
+	echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.d/40-max-user-watches.conf && sudo sysctl --system
+	mkdir -p ~/Pictures/Screenshots
 }
 
 # Installs the dependencies on Arch Linux
@@ -112,6 +122,8 @@ function install_dependencies {
 	fileToList dependencies/aur.txt | xargs trizen --force -S --noconfirm
 
 	fileToList dependencies/pip.txt | xargs sudo pip install
+
+	fileToList dependencies/npm.txt | xargs sudo npm install -g 
 }
 
 
@@ -127,6 +139,7 @@ function list_dependencies {
 	cat dependencies/pacman.txt
 	cat dependencies/aur.txt
 	cat dependencies/pip.txt
+	cat dependencies/npm.txt
 	echo ""
 	echo "=========================="
 	echo ""
